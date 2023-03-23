@@ -9,7 +9,7 @@ services:
     build:
       context: ./api/src
       dockerfile: ../dev.dockerfile
-    entrypoint: ["npm", "run", "start:prod"]
+    entrypoint: ["npm", "run", "start:dev"]
     env_file:
       - .env
     ports:

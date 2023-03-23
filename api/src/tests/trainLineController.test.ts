@@ -2,10 +2,8 @@ import request from "supertest";
 import app from "../index";
 import { server } from "../index"
 import * as trainLineModel from "../models/trainLine";
-import * as dbUtils from "../dbUtils";
 import * as db from "../db";
 
-jest.mock("../dbUtils");
 
 jest.mock("../db");
 
