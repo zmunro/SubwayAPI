@@ -9,8 +9,12 @@
     "resolveJsonModule": true,
     "outDir": "dist",
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "types": ["node", "jest", "express", "pg", "supertest"]
   },
-  "include": ["/usr/src/app/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": ["./**/*.ts", "./tests/*.ts"],
+  "exclude": ["node_modules"],
+  "typeAcquisition": {
+    "include": ["jest"]
+  }
 }

@@ -1,21 +1,30 @@
-CREATE TABLE train_lines (
+CREATE TABLE IF NOT EXISTS train_lines (
   id SERIAL PRIMARY KEY,
-  stations TEXT[] NOT NULL,
-  name VARCHAR(255) NOT NULL,
+  name VARCHAR(255) UNIQUE NOT NULL,
   fare NUMERIC(5, 2) NOT NULL
 );
 
-CREATE TABLE cards (
+CREATE TABLE IF NOT EXISTS stations (
   id SERIAL PRIMARY KEY,
-  number VARCHAR(255) NOT NULL UNIQUE,
+  name VARCHAR(255) UNIQUE NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS train_line_stations (
+  id SERIAL PRIMARY KEY,
+  train_line_id INTEGER REFERENCES train_lines (id) ON DELETE CASCADE,
+  station_id INTEGER REFERENCES stations (id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS cards (
+  id SERIAL PRIMARY KEY,
+  number VARCHAR(255) UNIQUE NOT NULL,
   balance NUMERIC(10, 2) NOT NULL
 );
 
-CREATE TABLE ride_logs (
+CREATE TABLE IF NOT EXISTS rides (
   id SERIAL PRIMARY KEY,
-  card_id INTEGER REFERENCES cards(id),
-  origin_station VARCHAR(255),
-  destination_station VARCHAR(255),
-  enter_time TIMESTAMP WITH TIME ZONE,
-  exit_time TIMESTAMP WITH TIME ZONE
+  card_id INTEGER REFERENCES cards (id) ON DELETE CASCADE,
+  station_id INTEGER REFERENCES stations (id) ON DELETE CASCADE,
+  entry_exit VARCHAR(255) NOT NULL,
+  timestamp TIMESTAMP NOT NULL
 );
