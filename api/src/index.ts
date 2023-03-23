@@ -3,7 +3,7 @@ import { createTrainLine } from "./controllers/trainLineController";
 import { createCard } from "./controllers/cardController";
 import { enter, exit } from "./controllers/stationController";
 import { getRoute } from "./controllers/routeController";
-import { connectWithRetry, createSchema } from "./dbUtils";
+import { connectWithRetry } from "./dbUtils";
 
 const port = process.env.NODE_ENV === 'test' ? 0 : process.env.PORT || 3000;
 const app = express();
@@ -11,7 +11,6 @@ app.use(express.json());
 
 if (process.env.NODE_ENV !== "test") {
   connectWithRetry();
-  createSchema();
 }
 
 app.post("/train-line", createTrainLine);

@@ -1,20 +1,5 @@
 // src/dbUtils.ts
 import pool from './db';
-import { join } from 'path';
-import { readFileSync } from 'fs';
-
-export async function createSchema() {
-    const client = await pool.connect();
-    try {
-      const schemaPath = join(__dirname, 'schema.sql');
-      const schemaSql = readFileSync(schemaPath, 'utf8');
-      await client.query(schemaSql);
-    } catch (error) {
-      console.error('Error creating schema:', error);
-    } finally {
-      client.release();
-    }
-  }
 
 export const connectWithRetry = () => {
   console.log('Attempting to connect to the database...');
