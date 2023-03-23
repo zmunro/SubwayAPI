@@ -13,8 +13,10 @@ const dbUtils_1 = require("./dbUtils");
 const port = process.env.NODE_ENV === 'test' ? 0 : process.env.PORT || 3000;
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
-(0, dbUtils_1.connectWithRetry)();
-(0, dbUtils_1.createSchema)();
+if (process.env.NODE_ENV !== "test") {
+    (0, dbUtils_1.connectWithRetry)();
+    (0, dbUtils_1.createSchema)();
+}
 app.post("/train-line", trainLineController_1.createTrainLine);
 app.post("/card", cardController_1.createCard);
 app.post("/station/:station/enter", stationController_1.enter);

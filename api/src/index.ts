@@ -9,10 +9,10 @@ const port = process.env.NODE_ENV === 'test' ? 0 : process.env.PORT || 3000;
 const app = express();
 app.use(express.json());
 
-connectWithRetry();
-
-
-createSchema();
+if (process.env.NODE_ENV !== "test") {
+  connectWithRetry();
+  createSchema();
+}
 
 app.post("/train-line", createTrainLine);
 app.post("/card", createCard);

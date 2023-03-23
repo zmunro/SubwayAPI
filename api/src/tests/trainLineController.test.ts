@@ -1,75 +1,58 @@
-import request from 'supertest';
-import app from '../index';
-import { server } from '../index';
-import pool from '../db';
-import { connectWithRetry, createSchema } from '../dbUtils'
-import { QueryResult } from 'pg';
-import { createTrainLineModel } from '../models/trainLine'
+import request from "supertest";
+import app from "../index";
+import { server } from "../index"
+import * as trainLineModel from "../models/trainLine";
+import * as dbUtils from "../dbUtils";
+import * as db from "../db";
 
-jest.mock('../models/trainLine', () => ({
-  createTrainLineModel: jest.fn(),
-}));
+jest.mock("../dbUtils");
 
-// Mock the 'createSchema' and 'connectWithRetry' functions
-jest.mock('../dbUtils', () => ({
-  createSchema: jest.fn(),
-  connectWithRetry: jest.fn(),
-}));
+jest.mock("../db");
 
-afterAll(() => {
-  server.close();
-});
+afterAll(() => server.close());
 
-
-// Mock the 'pool' object from the 'db.ts' file
-jest.mock('../db');
-
-// Create a mocked version of the 'pool.query()' method
-pool.query = jest.fn();
-
-
+const trainLineModelSpy = jest.spyOn(trainLineModel, 'createTrainLineModel');
 beforeEach(() => {
-  // Clear the mock calls before each test
-  (pool.query as jest.Mock).mockClear();
+  jest.clearAllMocks();
 });
 
-describe('POST /train-line', () => {
-  it('should create a new train line', async () => {
-    // Mock the 'pool.query()' method to return a successful result
-    (createTrainLineModel as jest.Mock).mockImplementationOnce(async () => {
-      return { rows: [], rowCount: 1 };
+describe("POST /train-line", () => {
+    it("should create a new train line", async () => {
+    // Mock the trainLineModel.createTrainLineModel() method to return a successful result
+    const mockCreateTrainLineModel = trainLineModelSpy.mockImplementationOnce(() => {
+      return Promise.resolve({ rows: [], rowCount: 1 })
     });
-    (pool.query as jest.Mock).mockResolvedValueOnce({} as QueryResult);
 
-    const response = await request(app)
-      .post('/train-line')
-      .send({
-        stations: ['Canal', 'Houston', 'Christopher', '14th'],
-        name: '1',
-        fare: 2.75,
-      });
+    const response = await request(app).post("/train-line").send({
+      stations: ["station1", "station2"],
+      name: "train1",
+      fare: 10,
+    });
 
-    expect(response.status).toEqual(201);
-    expect(response.body).toHaveProperty('message', 'Train line created successfully');
+    expect(response.status).toBe(201);
+    expect(response.body).toEqual({ message: "Train line created successfully" });
+
+    expect(mockCreateTrainLineModel).toHaveBeenCalledTimes(1);
+    expect(mockCreateTrainLineModel).toHaveBeenCalledWith(["station1", "station2"], "train1", 10);
   });
 
-  it('should return an error if the train line name is not unique', async () => {
-    // Mock the 'pool.query()' method to return an error
-    (pool.query as jest.Mock).mockRejectedValueOnce(new Error('Unique constraint violation'));
-
-    (createTrainLineModel as jest.Mock).mockImplementationOnce(async () => {
-      throw new Error('Train line name is not unique');
+  it("should return an error if the train line name is not unique", async () => {
+    // Mock the trainLineModel.createTrainLineModel() method to throw an error
+    
+    const mockCreateTrainLineModel = trainLineModelSpy.mockImplementationOnce(async () => {
+      throw new Error("Train line name is not unique");
     });
 
-    const response = await request(app)
-      .post('/train-line')
-      .send({
-        stations: ['Canal', 'Houston', 'Christopher', '14th'],
-        name: '1',
-        fare: 2.75,
-      });
+    const response = await request(app).post("/train-line").send({
+      stations: ["station1", "station2"],
+      name: "train1",
+      fare: 10,
+    });
 
-    expect(response.status).toEqual(500);
-    expect(response.body).toHaveProperty('error');
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({ error: "Train line name is not unique" });
+
+    expect(mockCreateTrainLineModel).toHaveBeenCalledTimes(1);
+    expect(mockCreateTrainLineModel).toHaveBeenCalledWith(["station1", "station2"], "train1", 10);
   });
 });

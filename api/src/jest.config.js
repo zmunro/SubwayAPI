@@ -1,9 +1,9 @@
 module.exports = {
     preset: 'ts-jest',
     testEnvironment: 'node',
-    roots: ['/usr/src/app'],
+    roots: ['/usr/src'],
     moduleNameMapper: {
-      '^@/(.*)$': '/usr/src/app/$1',
+      '^@/(.*)$': '/usr/src/$1',
     },
   };
   
