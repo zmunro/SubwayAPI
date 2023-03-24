@@ -23,7 +23,8 @@ CREATE TABLE IF NOT EXISTS cards (
 CREATE TABLE IF NOT EXISTS rides (
   id SERIAL PRIMARY KEY,
   card_id INTEGER REFERENCES cards (id) ON DELETE CASCADE,
-  station_id INTEGER REFERENCES stations (id) ON DELETE CASCADE,
-  entry_exit VARCHAR(255) NOT NULL,
-  timestamp TIMESTAMP NOT NULL
+  origin_station VARCHAR(255) REFERENCES stations (name) ON DELETE CASCADE,
+  exit_station VARCHAR(255) REFERENCES stations (name) ON DELETE CASCADE,
+  enter_time TIMESTAMP NOT NULL,
+  exit_time TIMESTAMP
 );

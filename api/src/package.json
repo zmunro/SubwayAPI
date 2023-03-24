@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --detectOpenHandles",
+    "test": "NODE_ENV=test && jest --detectOpenHandles",
     "start:dev": "nodemon index.ts",
     "start:prod": "node dist/index.js",
     "build": "tsc"

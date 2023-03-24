@@ -9,7 +9,7 @@ export async function createOrUpdateCard(number: string, amount: number) {
 
     if (existingCard.rowCount === 0) {
       card = await client.query('INSERT INTO cards (number, balance) VALUES ($1, $2) RETURNING *', [number, amount]);
-    } else {
+    } else {0
       card = await client.query('UPDATE cards SET balance = balance + $1 WHERE number = $2 RETURNING *', [amount, number]);
     }
 

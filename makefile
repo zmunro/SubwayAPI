@@ -1,2 +1,11 @@
 psql:
 	docker exec -it postgres bash -c "psql db_subway -U root"
+
+bash:
+	docker exec -it subwayapi bash
+
+test:
+	docker exec -it subwayapi bash -c "npm test"
+
+build:
+	docker exec -it subwayapi bash -c "npm build:prod"
