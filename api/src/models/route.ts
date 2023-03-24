@@ -32,7 +32,6 @@ export async function getOptimalRoute(origin: string, destination: string) {
       paths = paths.concat(newPaths);
     }
 
-    // Insecurity here since client provided input is not being sanitized
     throw new Error('No path from origin to destination found.');
     } catch (error) {
       throw error;

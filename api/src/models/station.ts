@@ -17,7 +17,7 @@ export async function getStationNeighbors(station: string) {
 
 export async function enterStation(station: string, card_number: string) {
   const client = await pool.connect();
-  // try {
+  try {
     await client.query("BEGIN");
     const card = await client.query("SELECT * FROM cards WHERE number = $1", [
       card_number,
@@ -42,12 +42,12 @@ export async function enterStation(station: string, card_number: string) {
     );
     await client.query("COMMIT");
     return updatedCard.rows[0]['balance'];
-  // } catch (error) {
-  //   await client.query("ROLLBACK");
-  //   throw error;
-  // } finally {
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
     client.release();
-  // }
+  }
 }
 
 export async function exitStation(station: string, card_number: string) {
