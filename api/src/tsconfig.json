@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "outDir": "dist",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "types": ["node", "jest", "express", "pg", "supertest"]
+  },
+  "include": ["./**/*.ts", "./tests/*.ts"],
+  "exclude": ["node_modules"],
+  "typeAcquisition": {
+    "include": ["jest"]
+  }
+}
