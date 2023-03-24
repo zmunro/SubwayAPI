@@ -1,32 +1,39 @@
 import pool from '../db';
+import { getStationNeighbors } from './station';
+
+
 
 export async function getOptimalRoute(origin: string, destination: string) {
   const client = await pool.connect();
   try {
-    const result = await client.query('SELECT stations FROM train_lines');
-    const trainLines = result.rows.map((row: any) => row.stations);
+    if (origin === destination) {
+      return [origin]
+    }
+    let seenStations = new Map<string, boolean>();
+    let neighbors = (await getStationNeighbors(origin)).rows[0]['neighboring_stations'];
+    let paths = neighbors.map((station: string) => [origin, station]);
+    seenStations.set(origin, true);
 
-    let minStations = Infinity;
-    let optimalRoute = [];
+    let index = 0;
+    while (index < paths.length) {
+      let currentPath = paths[index++]
+      let currentStation = currentPath.slice(-1)[0];
+      if (seenStations.has(currentStation)) {
+        continue;
+      }
 
-    for (const line of trainLines) {
-        const originIndex = line.indexOf(origin);
-        const destinationIndex = line.indexOf(destination);
-    
-        if (originIndex !== -1 && destinationIndex !== -1) {
-          const route = line.slice(Math.min(originIndex, destinationIndex), Math.max(originIndex, destinationIndex) + 1);
-          if (route.length < minStations) {
-            minStations = route.length;
-            optimalRoute = route;
-          }
-        }
+      if (currentStation == destination) {
+        return currentPath
       }
-    
-      if (optimalRoute.length === 0) {
-        throw new Error('No route found');
-      }
-    
-      return optimalRoute;
+      
+      let newNeighbors = (await getStationNeighbors(currentStation)).rows[0]['neighboring_stations'];
+      let newPaths = newNeighbors.map((station: string) => currentPath.concat([station]));
+      seenStations.set(currentStation, true);
+      paths = paths.concat(newPaths);
+    }
+
+    // Insecurity here since client provided input is not being sanitized
+    throw new Error('No path from origin to destination found.');
     } catch (error) {
       throw error;
     } finally {

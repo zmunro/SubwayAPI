@@ -14,16 +14,16 @@ export async function createTrainLineModel(stations: string[], name: string, far
     await client.query('BEGIN');
     const result = await client.query(queryString, queryArgs);
     let index = 0;
-    let neighbours = [];
+    let neighbors = [];
     for (const stationName of stations) {
       if (index === 0) {
-        neighbours = stations.slice(1, 2);
+        neighbors = stations.slice(1, 2);
       } else if (index === (stations.length - 1)) {
         console.log(`inserting station from end of station list: ${[stations[index - 1]]}`)
-        neighbours = [stations[index - 1]]; 
+        neighbors = [stations[index - 1]]; 
         // We know there are at least 2 elements or this would not have looped a second time to get here
       } else {
-        neighbours = [stations[index - 1], stations[index + 1]];
+        neighbors = [stations[index - 1], stations[index + 1]];
       }
       index += 1
       await client.query(`
@@ -31,7 +31,7 @@ export async function createTrainLineModel(stations: string[], name: string, far
         VALUES ($1, $2)
         ON CONFLICT (name)
         DO UPDATE SET neighboring_stations = stations.neighboring_stations || $2`
-      , [stationName, neighbours])
+      , [stationName, neighbors])
     }
     await client.query('COMMIT');
     return result.rows[0];

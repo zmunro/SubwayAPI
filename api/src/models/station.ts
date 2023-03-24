@@ -1,5 +1,20 @@
 import pool from '../db';
 
+export async function getStationNeighbors(station: string) {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    const neighbors = await client.query('SELECT neighboring_stations FROM stations WHERE name = $1', [station]);
+    await client.query('COMMIT');
+    return neighbors;
+  } catch (error) {
+    await client.query('ROLLBACK');
+    throw error;
+  } finally {
+    client.release();
+  }
+}
+
 export async function enterStation(station: string, card_number: string) {
   const client = await pool.connect();
   try {
