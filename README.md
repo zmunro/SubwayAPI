@@ -7,18 +7,20 @@ API for representing a subway system. For the full design specification adheared
 
 First, make sure to have the following programs installed:
 * [Docker-compose](https://docs.docker.com/compose/)
+* [Make](https://sp21.datastructur.es/materials/guides/make-install.html)
 
 After cloning the repository locally, run the following commands from the project root to build and start the containers:
 ```
-docker-compose build
-docker-compose up -d
+make dockerbuild
+make dockerup
 ```
 
-Several useful shortcuts have been provided in the makefile for ease of running commands inside the containers:
+Several other useful shortcuts have been provided in the makefile for ease of running commands inside the containers:
 * `make psql` to start the psql client inside the postgres container
 * `make test` to run the automated testing suite in the subwayapi container
 * `make bash` to start a bash shell in the subwayapi container
 * `make build` to execute a production build of the application
+
 
 You can access the server by sending requests to `127.0.0.1:3000`
 

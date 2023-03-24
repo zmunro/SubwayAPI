@@ -9,3 +9,10 @@ test:
 
 build:
 	docker exec -it subwayapi bash -c "npm build:prod"
+
+dockerbuild:
+	mkdir pgdata
+	docker-compose build
+
+dockerup:
+	docker-compose up -d
