@@ -6,7 +6,7 @@ const poolConfig = {
   database: `${process.env.POSTGRES_DB_PREFIX}_${process.env.POSTGRES_DB_NAME}`,
   password: `${process.env.POSTGRES_PASSWORD}`,
   port: parseInt(`${process.env.POSTGRES_DB_PORT}`),
-  host: `${process.env.PG_DATABASE_HOST}`,
+  host: `${process.env.POSTGRES_DB_HOST}`,
 }
 
 

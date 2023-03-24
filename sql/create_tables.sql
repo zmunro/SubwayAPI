@@ -4,18 +4,14 @@ GRANT ALL PRIVILEGES ON DATABASE db_subway TO root;
 CREATE TABLE IF NOT EXISTS train_lines (
   id SERIAL PRIMARY KEY,
   name VARCHAR(255) UNIQUE NOT NULL,
+  stations_array TEXT [],
   fare NUMERIC(5, 2) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS stations (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(255) UNIQUE NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS train_line_stations (
-  id SERIAL PRIMARY KEY,
-  train_line_id INTEGER REFERENCES train_lines (id) ON DELETE CASCADE,
-  station_id INTEGER REFERENCES stations (id) ON DELETE CASCADE
+  name VARCHAR(255) UNIQUE NOT NULL,
+  neighboring_stations TEXT []
 );
 
 CREATE TABLE IF NOT EXISTS cards (
