@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test && jest --detectOpenHandles",
-    "start:dev": "nodemon index.ts",
+    "start:dev": "npx nodemon index.ts",
     "start:prod": "node dist/index.js",
     "build": "tsc"
   },

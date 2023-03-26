@@ -1,4 +1,6 @@
-node_modules
+/api/src/node_modules/*
+!/api/src/node_modules/
+
 pgdata
 
 dist/

@@ -11,9 +11,14 @@ build:
 	docker exec -it subwayapi bash -c "npm build:prod"
 
 dockerbuild:
-	mkdir pgdata
-	mkdir api/src/node_modules
+	mkdir -p pgdata
 	docker-compose build
 
 dockerup:
 	docker-compose up -d
+
+healthcheck:
+	curl 127.0.0.1:3000/healthcheck
+
+logs:
+	docker logs subwayapi

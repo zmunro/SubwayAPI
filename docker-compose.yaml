@@ -5,7 +5,6 @@ services:
     container_name: subwayapi
     volumes:
       - ./api/src:/usr/src/
-      - ./api/src/node_modules:/usr/src/
     build:
       context: ./api/src
       dockerfile: ../dev.dockerfile
