@@ -12,6 +12,7 @@ build:
 
 dockerbuild:
 	mkdir pgdata
+	mkdir api/src/node_modules
 	docker-compose build
 
 dockerup:
